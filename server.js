@@ -244,6 +244,26 @@ app.post('/whatsapp/logout-and-reconnect', async (req, res, next) => {
 	}
 });
 
+// Sync current local store to Excel (one-click export)
+app.post('/employees/sync-to-excel', (req, res, next) => {
+	try {
+		const result = dataStore.syncToExcel();
+		res.json({ success: true, ...result, message: 'Excel updated from local store' });
+	} catch (err) {
+		next(err);
+	}
+});
+
+// Reload local store from Excel (overwrite local cache)
+app.post('/employees/reload-from-excel', (req, res, next) => {
+	try {
+		const result = dataStore.reloadFromExcel();
+		res.json({ success: true, ...result, message: 'Local store reloaded from Excel' });
+	} catch (err) {
+		next(err);
+	}
+});
+
 app.use((req, res, next) => {
 	next(boom.notFound('Route not found'));
 });
